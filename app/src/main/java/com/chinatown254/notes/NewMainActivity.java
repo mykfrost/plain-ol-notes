@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -62,29 +63,29 @@ private MainViewModel mViewModel ;
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         ButterKnife.bind(this);
-        initViewModel();
         initRecyclerView();
-//        binding.fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//
-//            }
-//        });
-
-
-
-        notesData.addAll(mViewModel.mNotes);
-        for (NoteEntity note :notesData
-                ) {
-            Log.i("Plain Ol Notes", note.toString());
-        }
+        initViewModel();
     }
 
     private void initViewModel() {
 
+        final Observer<List<NoteEntity>> notesObserver = new Observer<List<NoteEntity>>() {
+            @Override
+            public void onChanged(List<NoteEntity> noteEntities) {
+                notesData.clear();
+                notesData.addAll(noteEntities);
+                if (mAdapter == null) {
+                    mAdapter = new NotesAdapter(notesData, NewMainActivity.this);
+                    mRecyclerview.setAdapter(mAdapter);
+                }else {
+                    mAdapter.notifyDataSetChanged();
+                }
+
+            }
+        };
+
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mViewModel.mNotes.observe(this , notesObserver);
     }
 
     private void initRecyclerView() {
@@ -92,8 +93,7 @@ private MainViewModel mViewModel ;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerview.setLayoutManager(layoutManager);
 
-        mAdapter = new NotesAdapter(notesData, this);
-        mRecyclerview.setAdapter(mAdapter);
+
     }
 
     @Override

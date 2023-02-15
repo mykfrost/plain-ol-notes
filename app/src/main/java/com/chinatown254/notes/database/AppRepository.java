@@ -1,5 +1,8 @@
 package com.chinatown254.notes.database;
 import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+
 import com.chinatown254.notes.utils.SampleData;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -9,7 +12,7 @@ import java.util.concurrent.Executors;
 public class AppRepository {
     private static  AppRepository ourInstance ;
 
-    public List<NoteEntity> mNotes ;
+    public LiveData< List<NoteEntity>> mNotes ;
     private AppDatabase mDb ;
     private Executor executor = Executors.newSingleThreadExecutor();
     public static AppRepository getInstance(Context context){
@@ -20,8 +23,9 @@ public class AppRepository {
     }
 
     private AppRepository(Context context){
-        mNotes = SampleData.getNotes();
         mDb = AppDatabase.getInstance(context);
+        mNotes = getAllNotes();
+
     }
 
     public void addSampleData() {
@@ -31,6 +35,10 @@ public class AppRepository {
                 mDb.noteDao().insertAll(SampleData.getNotes());
             }
         });
+    }
+
+    private LiveData<List<NoteEntity>> getAllNotes(){
+        return mDb.noteDao().getAll();
     }
 }
 
