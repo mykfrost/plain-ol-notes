@@ -12,8 +12,9 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        vectorDrawables.useSupportLibrary =  true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
 
     buildTypes {
@@ -26,14 +27,41 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
+    buildToolsVersion '33.0.1'
 }
 
 dependencies {
 
+    implementation 'com.avito.android:instrumentation:2023.2'
+    implementation 'com.cedarsoft.annotations:instrumentation:8.9.0'
+    implementation 'org.brutusin:instrumentation:1.0.0'
+    implementation 'com.tunjid.androidx:test:1.0.0-rc01'
+    implementation 'androidx.test:runner:1.5.2'
+    testImplementation 'aws.sdk.kotlin:support:0.20.2-beta'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+    implementation 'com.forceai:butterknife:10.2.3.6'
+    def lifecycle_version = "2.5.1"
+    def arch_version = "2.1.0"
+    def room_version = "2.5.0"
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata:2.5.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+}
+
+repositories {
+    google()
 }

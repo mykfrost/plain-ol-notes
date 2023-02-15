@@ -1,4 +1,4 @@
-package com.chinatown254.notes.model;
+package com.chinatown254.notes.database;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
