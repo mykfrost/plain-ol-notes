@@ -7,9 +7,11 @@ import com.chinatown254.notes.database.NoteEntity;
 import com.chinatown254.notes.ui.NotesAdapter;
 import com.chinatown254.notes.utils.SampleData;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
+import android.view.MenuItem;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -73,7 +75,7 @@ private MainViewModel mViewModel ;
 
 
 
-        notesData.addAll(SampleData.getNotes());
+        notesData.addAll(mViewModel.mNotes);
         for (NoteEntity note :notesData
                 ) {
             Log.i("Plain Ol Notes", note.toString());
@@ -99,5 +101,20 @@ private MainViewModel mViewModel ;
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_new_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.add_sample_data){
+            addSampleData();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void addSampleData() {
+        mViewModel.addSampleData();
     }
 }
