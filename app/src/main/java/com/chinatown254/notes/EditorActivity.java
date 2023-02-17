@@ -17,6 +17,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -44,7 +46,7 @@ public class EditorActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
-        toolBarLayout.setTitle(getTitle());
+        toolBarLayout.setTitle(getString(R.string.new_note));
         ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_check);
         ab.setDisplayHomeAsUpEnabled(true);
@@ -69,13 +71,22 @@ public class EditorActivity extends AppCompatActivity {
 
          Bundle extras = getIntent().getExtras();
         if (extras == null) {
-            setTitle("New Note");
+            setTitle(getString(R.string.new_note));
             mNewNote = true;
         }else {
-            setTitle("Edit Note");
+            setTitle(getString(R.string.edit_note));
             int noteid = extras.getInt(NOTE_ID_KEY);
             mViewModel.loadData(noteid);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!mNewNote ) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_editor , menu);
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -83,6 +94,9 @@ public class EditorActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             saveAndReturn();
             return true;
+        } else if (item.getItemId() == R.id.action_delete) {
+            mViewModel.deleteNote();
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
