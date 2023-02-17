@@ -21,6 +21,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -92,7 +93,9 @@ private MainViewModel mViewModel ;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerview.setLayoutManager(layoutManager);
 
-
+        DividerItemDecoration divider = new DividerItemDecoration(
+                mRecyclerview.getContext(),layoutManager.getOrientation());
+        mRecyclerview.addItemDecoration(divider);
     }
 
     @Override
