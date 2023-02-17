@@ -1,5 +1,6 @@
 package com.chinatown254.notes;
 
+import static com.chinatown254.notes.utils.Constants.EDITING_KEY;
 import static com.chinatown254.notes.utils.Constants.NOTE_ID_KEY;
 
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class EditorActivity extends AppCompatActivity {
     TextView mTextview;
     private EditorViewModel mViewModel;
     private ActivityEditorBinding binding;
-    private boolean mNewNote;
+    private boolean mNewNote ,mEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,10 @@ public class EditorActivity extends AppCompatActivity {
         ab.setHomeAsUpIndicator(R.drawable.ic_check);
         ab.setDisplayHomeAsUpEnabled(true);
 
+        if (savedInstanceState != null) {
+            mEdit = savedInstanceState.getBoolean(EDITING_KEY);
+        }
+
         ButterKnife.bind(this);
 
         initViewModel();
@@ -62,7 +67,7 @@ public class EditorActivity extends AppCompatActivity {
         mViewModel.mLiveNotes.observe(this, new Observer<NoteEntity>() {
             @Override
             public void onChanged(NoteEntity noteEntity) {
-                if (noteEntity != null) {
+                if (noteEntity != null && !mEdit) {
                     mTextview.setText(noteEntity.getText());
                 }
 
@@ -110,5 +115,11 @@ public class EditorActivity extends AppCompatActivity {
     private void saveAndReturn() {
         mViewModel.saveNote(mTextview.getText().toString());
         finish();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean(EDITING_KEY , true);
+        super.onSaveInstanceState(outState);
     }
 }
