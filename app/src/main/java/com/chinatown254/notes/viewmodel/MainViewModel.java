@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
     public LiveData< List<NoteEntity>> mNotes ;
-    private AppRepository mRepository;
+    private final AppRepository mRepository;
     public MainViewModel(@NonNull Application application) {
         super(application);
         mRepository = AppRepository.getInstance(application.getApplicationContext());
@@ -23,5 +23,9 @@ public class MainViewModel extends AndroidViewModel {
 
     public void addSampleData() {
         mRepository.addSampleData();
+    }
+
+    public void deleteAllNotes() {
+        mRepository.deleteAllNotes();
     }
 }

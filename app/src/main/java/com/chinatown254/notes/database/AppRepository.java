@@ -23,6 +23,7 @@ public class AppRepository {
     }
 
     private AppRepository(Context context){
+        //mNotes = getAllNotes();
         mDb = AppDatabase.getInstance(context);
         mNotes = getAllNotes();
 
@@ -39,6 +40,28 @@ public class AppRepository {
 
     private LiveData<List<NoteEntity>> getAllNotes(){
         return mDb.noteDao().getAll();
+    }
+
+    public void deleteAllNotes() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.noteDao().deleteAll();
+            }
+        });
+    }
+
+    public NoteEntity getNoteById(int noteid) {
+        return mDb.noteDao().getNoteById(noteid);
+    }
+
+    public void insertNote(NoteEntity note) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.noteDao().insertNote(note);
+            }
+        });
     }
 }
 
